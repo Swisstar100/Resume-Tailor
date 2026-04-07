@@ -1,0 +1,1 @@
+Website runs super super slow right now. I've deployed using EC2 with t3.small, I'm using ML imports like spaCy and sentence_transformers in tasks which is too much for the 2gb that t3.small has. I'll fix this later.
