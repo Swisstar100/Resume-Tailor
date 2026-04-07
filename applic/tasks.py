@@ -5,7 +5,7 @@ import uuid
 import logging
 from dotenv import find_dotenv, load_dotenv
 from .models import Application
-from .utils.scoring2 import get_skill_experience_info, html_to_text, normalize_text
+#from .utils.scoring2 import get_skill_experience_info, html_to_text, normalize_text
 from .utils.sanitize import _sanitize_ai_html
 from .utils.pdf import resume_to_pdf
 from django.core.files.base import ContentFile
@@ -29,7 +29,7 @@ def generate_ai_resume_task(self, app_id, locked_sections):
     except Application.DoesNotExist:
         logger.error("Application %s not found in generate_ai_resume_task", app_id)
         return
-
+    from .utils.scoring2 import get_skill_experience_info, html_to_text, normalize_text
     user_resume = (application.processed_resume or "")[:7000]
     job_post = (application.uploaded_post or "")[:7000]
     locked_text = ", ".join(locked_sections) if locked_sections else "No locked sections, you may edit any section of the resume."
@@ -264,7 +264,7 @@ def generate_student_feedback_task(self, app_id):
     except Application.DoesNotExist:
         logger.error("Application %s not found in generate_student_feedback_task", app_id)
         return
-
+    
     resume_text = (application.returned_processed_resume or "")[:7000]
 
     system_prompt = f"""
@@ -317,7 +317,7 @@ def process_application_task(self, app_id):
     except Application.DoesNotExist:
         logger.error("Application %s not found in process_application_task", app_id)
         return
-
+    from .utils.scoring2 import get_skill_experience_info
     try:
         score_info = get_skill_experience_info(application.processed_resume[:7000], application.uploaded_post)
         application.old_skills = [score_info["skill_score"], score_info["experience_score"], 100, round(score_info["skill_score"] * .6 + score_info["experience_score"] * .4, 2)]
