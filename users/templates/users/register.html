@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block title %}Create Account — Resume Tailor{% endblock %}
+{% block content %}
+
+<div class="auth-page">
+  <div class="auth-bg-grid"></div>
+  <div class="auth-glow"></div>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="auth-logo-mark">RT</span>
+    </div>
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-subtitle">Start tailoring your resume with AI</p>
+
+    <form action="{% url 'users:register' %}" method="post" class="auth-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <span class="field-error">{{ form.username.errors|join:", " }}</span>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_email">Email</label>
+        <input type="email" name="email" id="id_email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+          <span class="field-error">{{ form.password1.errors|join:", " }}</span>
+        {% endif %}
+        <div class="password-rules">
+          <span class="rule"><span class="rule-dot"></span>At least 8 characters</span>
+          <span class="rule"><span class="rule-dot"></span>Not entirely numeric</span>
+          <span class="rule"><span class="rule-dot"></span>Not a common password</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+          <span class="field-error">{{ form.password2.errors|join:", " }}</span>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="auth-submit">
+        Create Account <span class="btn-arrow">→</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Already have an account?
+      <a href="{% url 'users:login' %}">Sign in</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %}New Application — Resume Tailor{% endblock %}
+{% block content %}
+
+<div class="dashboard-page">
+
+  <div class="dashboard-header">
+    <div class="container">
+      <div class="dashboard-header-inner">
+        <div>
+          <a href="{% url 'applications:board' %}" class="back-link">← Dashboard</a>
+          <h1 class="dashboard-title" style="margin-top: 8px;">New Application</h1>
+          <p class="dashboard-greeting" style="margin-top: 6px; text-transform: none; letter-spacing: 0;">
+            Upload your resume and job listing to get started
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container app-detail-body">
+    <div class="detail-section" style="max-width: 640px;">
+
+      <h2 class="detail-section-title">Upload Documents</h2>
+
+      <form method="POST" action="{% url 'applications:create_application' %}" enctype="multipart/form-data" class="auth-form">
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            {% if field.field.widget.input_type == 'file' %}
+              <div class="file-drop-zone" id="drop-{{ field.html_name }}">
+                <div class="file-drop-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                </div>
+                <p class="file-drop-text">Drop your file here or <span class="file-drop-browse">browse</span></p>
+                <p class="file-drop-hint">PDF files only</p>
+                {{ field }}
+                <p class="file-selected-name" id="name-{{ field.html_name }}"></p>
+              </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+
+            {% if field.errors %}
+              <span class="field-error">{{ field.errors|join:", " }}</span>
+            {% endif %}
+
+            {% if field.help_text %}
+              <span class="form-help">{{ field.help_text }}</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="auth-submit" style="max-width: 240px;">
+          Submit Application <span class="btn-arrow">→</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.file-drop-zone').forEach((zone) => {
+    const input = zone.querySelector('input[type="file"]');
+    const nameEl = zone.querySelector('.file-selected-name');
+
+    // Click anywhere on zone to open file picker
+    zone.addEventListener('click', () => input.click());
+    input.addEventListener('click', (e) => e.stopPropagation());
+
+    // Show selected filename
+    input.addEventListener('change', () => {
+      if (input.files.length) {
+        nameEl.textContent = input.files[0].name;
+        zone.classList.add('file-drop-zone-filled');
+      } else {
+        nameEl.textContent = '';
+        zone.classList.remove('file-drop-zone-filled');
+      }
+    });
+
+    // Drag and drop
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      zone.classList.add('file-drop-zone-hover');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('file-drop-zone-hover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('file-drop-zone-hover');
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        input.files = files;
+        nameEl.textContent = files[0].name;
+        zone.classList.add('file-drop-zone-filled');
+      }
+    });
+  });
+</script>
+
+{% endblock %}

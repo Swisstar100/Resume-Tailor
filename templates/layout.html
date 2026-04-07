@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <title>{% block title %}Resume Tailor{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner container">
+      <a href="{% url 'applications:board' %}" class="nav-logo">
+        <span class="nav-logo-mark">RT</span>
+        <span class="nav-logo-text">Resume Tailor</span>
+      </a>
+      <div class="nav-links">
+        {% if user.is_authenticated %}
+          <a href="{% url 'applications:board' %}" class="nav-link">Dashboard</a>
+          <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="nav-link nav-link-btn">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'users:login' %}" class="nav-link">Sign In</a>
+          <a href="{% url 'users:register' %}" class="nav-cta">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}Resume Tailor — AI-Powered Resume Optimization{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container hero-inner">
+    <!-- Left column: text content -->
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AI-Powered · Instant Results
+      </div>
+      <h1 class="hero-title">
+        Your Resume,<br>
+        <span class="hero-title-accent">Tailored to Win.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Upload your resume and a job listing. Our AI rewrites, scores, and sharpens
+        your application — giving you a real competitive edge.
+      </p>
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'applications:board' %}" class="btn-primary">Go to Dashboard <span class="btn-arrow">→</span></a>
+        {% else %}
+          <a href="{% url 'users:register' %}" class="btn-primary">Get Started Free <span class="btn-arrow">→</span></a>
+          <a href="{% url 'users:login' %}" class="btn-ghost">Sign In</a>
+        {% endif %}
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">3x</span>
+          <span class="stat-label">More Interviews</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">60s</span>
+          <span class="stat-label">To Optimize</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">ATS</span>
+          <span class="stat-label">Optimized</span>
+        </div>
+      </div>
+    </div>
+    <!-- Right column: floating resume card -->
+    <div class="hero-card-wrapper">
+    <div class="resume-preview-card">
+      <div class="card-header">
+        <div class="card-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="card-title-label">resume_tailor_ai.pdf</span>
+      </div>
+      <div class="card-score-block">
+        <div class="score-ring">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" class="ring-bg"/>
+            <circle cx="40" cy="40" r="34" class="ring-fill" stroke-dasharray="175 213" stroke-dashoffset="-27"/>
+          </svg>
+          <span class="score-number">92</span>
+        </div>
+        <div class="score-info">
+          <span class="score-label">Match Score</span>
+          <span class="score-sub">Senior Frontend Role</span>
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag tag-green">✓ ATS Friendly</span>
+        <span class="tag tag-blue">✓ Keywords Matched</span>
+        <span class="tag tag-amber">⚡ 3 Improvements</span>
+      </div>
+      <div class="card-lines">
+        <div class="line w-full"></div>
+        <div class="line w-3/4"></div>
+        <div class="line w-5/6"></div>
+        <div class="line w-2/3"></div>
+      </div>
+    </div><!-- /resume-preview-card -->
+    </div><!-- /hero-card-wrapper -->
+  </div><!-- /hero-inner -->
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Process</span>
+      <h2 class="section-title">Three steps to a better resume</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-number">01</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3>Upload Your Resume</h3>
+        <p>Drop in your current resume and the job description you're targeting.</p>
+      </div>
+      <div class="step-connector">
+        <div class="connector-line"></div>
+        <div class="connector-arrow">›</div>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <h3>AI Analysis</h3>
+        <p>Our AI scores your resume, identifies gaps, and rewrites it for maximum impact.</p>
+      </div>
+      <div class="step-connector">
+        <div class="connector-line"></div>
+        <div class="connector-arrow">›</div>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <h3>Get Results</h3>
+        <p>Download your optimized resume with a full report on strengths and improvements.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything you need to land the role</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card feature-card-large">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </div>
+        <h3>AI Resume Rewriting</h3>
+        <p>Our model rewrites every bullet point to match the language, tone, and keywords recruiters and ATS systems are looking for — without losing your voice.</p>
+        <div class="feature-pill">Core Feature</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h3>Match Scoring</h3>
+        <p>Get an instant compatibility score between your resume and the job listing.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </div>
+        <h3>Strength & Gap Analysis</h3>
+        <p>Understand exactly what's working and what's holding your resume back.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3>ATS Optimization</h3>
+        <p>Ensure your resume passes automated screening systems every time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <h3>Project Highlights</h3>
+        <p>AI evaluates your projects for relevance and rewrites them for maximum impact.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="container cta-inner">
+    <div class="cta-text">
+      <h2>Ready to tailor your resume?</h2>
+      <p>Join thousands of job seekers who landed interviews with an AI-optimized resume.</p>
+    </div>
+    <div class="cta-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'applications:board' %}" class="btn-primary btn-large">Open Dashboard <span class="btn-arrow">→</span></a>
+      {% else %}
+        <a href="{% url 'users:register' %}" class="btn-primary btn-large">Start for Free <span class="btn-arrow">→</span></a>
+        <a href="{% url 'users:login' %}" class="btn-ghost">Already have an account?</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">Resume Tailor</span>
+      <span class="footer-tagline">AI-powered. Human-ready.</span>
+    </div>
+    <div class="footer-links">
+      {% if user.is_authenticated %}
+        <a href="{% url 'applications:board' %}">Dashboard</a>
+      {% else %}
+        <a href="{% url 'users:login' %}">Login</a>
+        <a href="{% url 'users:register' %}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+<!-- Mouse-tracking glow — GPU blur, no overflow:hidden, rAF throttled -->
+<script>
+  (function () {
+    document.querySelectorAll('.feature-card').forEach((card) => {
+      const glow = document.createElement('div');
+      glow.className = 'card-glow';
+      card.appendChild(glow);
+
+      let rafId = null;
+      let px = 0, py = 0;
+
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        // Clamp so glow center stays inside card — no overflow needed
+        px = Math.max(0, Math.min(e.clientX - r.left, r.width));
+        py = Math.max(0, Math.min(e.clientY - r.top,  r.height));
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          glow.style.transform = `translate(${px}px, ${py}px) translate(-50%, -50%)`;
+          rafId = null;
+        });
+      });
+    });
+  })();
+</script>
+
+{% endblock %}

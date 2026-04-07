@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+{% block title %}Sign In — Resume Tailor{% endblock %}
+{% block content %}
+
+<div class="auth-page">
+  <div class="auth-bg-grid"></div>
+  <div class="auth-glow"></div>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="auth-logo-mark">RT</span>
+    </div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Sign in to your Resume Tailor account</p>
+
+    {% if form.non_field_errors %}
+      <div class="auth-error">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Incorrect username or password. Please try again.
+      </div>
+    {% endif %}
+
+    <form action="{% url 'users:login' %}" method="post" class="auth-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <span class="field-error">{{ form.username.errors|join:", " }}</span>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+          <span class="field-error">{{ form.password.errors|join:", " }}</span>
+        {% endif %}
+      </div>
+
+      {% if request.GET.next and request.GET.next|slice:":1" == "/" %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+
+      <button type="submit" class="auth-submit">
+        Sign In <span class="btn-arrow">→</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Don't have an account?
+      <a href="{% url 'users:register' %}">Create one free</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

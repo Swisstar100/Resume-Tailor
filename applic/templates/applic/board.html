@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard — Resume Tailor{% endblock %}
+{% block content %}
+
+<div class="dashboard-page">
+
+  {% if user.is_authenticated %}
+
+  <div class="dashboard-header">
+    <div class="container">
+      <div class="dashboard-header-inner">
+        <div>
+          <p class="dashboard-greeting">Welcome back,</p>
+          <h1 class="dashboard-title">{{ user.username }}</h1>
+        </div>
+        <a href="{% url 'applications:create_application' %}" class="btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Application
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container dashboard-body">
+
+    {% if applications %}
+
+    <div class="section-label" style="margin-bottom: 20px;">{{ applications|length }} Application{{ applications|length|pluralize }}</div>
+
+    <div class="applications-grid">
+      {% for app in applications %}
+      <a href="{% url 'applications:application' app.id %}" class="app-card">
+        <div class="app-card-top">
+          <div class="app-card-id">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Application #{{ app.id }}
+          </div>
+          <span class="app-card-arrow">→</span>
+        </div>
+
+        <div class="app-card-score-row" data-score-row="{{ app.id }}">
+          {% with score=app.old_skills|slice:"3:4"|first %}
+            {% if score %}
+              {% if score >= 75 %}
+                <div class="app-score app-score-green">{{ score|floatformat:1 }}</div>
+              {% elif score >= 50 %}
+                <div class="app-score app-score-amber">{{ score|floatformat:1 }}</div>
+              {% else %}
+                <div class="app-score app-score-red">{{ score|floatformat:1 }}</div>
+              {% endif %}
+              <span class="app-score-label">Match Score</span>
+            {% else %}
+              <div class="app-score-pending">
+                <span class="pending-dot"></span>
+                Pending analysis
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+
+        <div class="app-card-date">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          {{ app.created_at|date:"M d, Y · H:i" }}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </div>
+      <h2 class="empty-title">No applications yet</h2>
+      <p class="empty-desc">Upload your resume and a job listing to get started.</p>
+      <a href="{% url 'applications:create_application' %}" class="btn-primary">
+        Create your first application <span class="btn-arrow">→</span>
+      </a>
+    </div>
+
+    {% endif %}
+
+  </div>
+
+  {% else %}
+
+  <div class="auth-page">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-glow"></div>
+    <div class="auth-card" style="text-align:center;">
+      <div class="auth-logo" style="display:flex;justify-content:center;">
+        <span class="auth-logo-mark">RT</span>
+      </div>
+      <h1 class="auth-title">Sign in to continue</h1>
+      <p class="auth-subtitle">You need to be logged in to view your dashboard.</p>
+      <a href="{% url 'users:login' %}" class="auth-submit" style="text-decoration:none; margin-top:8px;">
+        Go to Sign In <span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  {% endif %}
+
+</div>
+
+<script>
+(function () {
+  const STATUS_URL = "{% url 'applications:status' %}";
+
+  // Collect IDs of cards currently showing "Pending"
+  function getPendingIds() {
+    return Array.from(document.querySelectorAll('[data-score-row]'))
+      .filter(el => el.querySelector('.app-score-pending'))
+      .map(el => el.dataset.scoreRow);
+  }
+
+  function scoreClass(score) {
+    if (score >= 75) return 'app-score-green';
+    if (score >= 50) return 'app-score-amber';
+    return 'app-score-red';
+  }
+
+  function applyScore(row, score) {
+    const rounded = Math.round(score * 10) / 10;
+    row.innerHTML = `
+      <div class="app-score ${scoreClass(score)}">${rounded.toFixed(1)}</div>
+      <span class="app-score-label">Match Score</span>
+    `;
+  }
+
+  async function poll() {
+    const pending = getPendingIds();
+
+    // Nothing left to poll — stop
+    if (pending.length === 0) return;
+
+    try {
+      const res = await fetch(STATUS_URL, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const data = await res.json();
+
+      pending.forEach(id => {
+        // JSON keys are always strings — coerce to match
+        const app = data[String(id)];
+        if (!app || app.score === null || app.score === undefined) return;
+        const row = document.querySelector(`[data-score-row="${id}"]`);
+        if (row) applyScore(row, app.score);
+      });
+    } catch (e) {
+      // Network error — silently retry next tick
+    }
+
+    // Keep polling if anything is still pending
+    if (getPendingIds().length > 0) {
+      setTimeout(poll, 3000);
+    }
+  }
+
+  // Only start polling if there are pending cards on load
+  if (getPendingIds().length > 0) {
+    setTimeout(poll, 3000);
+  }
+})();
+</script>
+
+{% endblock %}
