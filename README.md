@@ -1,4 +1,5 @@
-Resume Tailor is a resume scoring and rewritting website built around scholarly articles on "Smart-Hiring" ATS soring systems used today (https://arxiv.org/html/2511.02537v1)
+Resume Tailor is a resume scoring and rewritting website built around scholarly articles on "Smart-Hiring" ATS soring systems used today. The article I based the scoring system on can be found here: https://arxiv.org/html/2511.02537v1.
+
 Users upload their resume and a job description; Resume Tailor then scores how well skills and experience line up to the job post, giving back a score and rewritten resume to better match the posted job description.
 
 The scoring system works as follows:
